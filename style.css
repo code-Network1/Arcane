@@ -2727,22 +2727,37 @@ img {
     height: 100px;
 }
 
-/* Custom Scrollbar for Page */
+/* Custom Scrollbar for Page - Arcane Theme */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
+}
+
+/* Firefox Scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #333333 #000000;
 }
 
 ::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-::-webkit-scrollbar-thumb {
-    background: linear-gradient(45deg, #4A90E2, #5BA0F2);
+    background: #000000;
     border-radius: 4px;
 }
 
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, #1a1a1a, #333333);
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(45deg, #5BA0F2, #4A90E2);
+    background: linear-gradient(45deg, #333333, #555555);
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: linear-gradient(45deg, #555555, #777777);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
 }
 
 /* Episodes Page Specific Styles */
@@ -3714,13 +3729,19 @@ img {
 }
 
 .character-scroll-container::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
+    background: #000000;
     border-radius: 2px;
 }
 
 .character-scroll-container::-webkit-scrollbar-thumb {
-    background: #4A90E2;
+    background: linear-gradient(180deg, #1a1a1a, #2a2a2a);
     border-radius: 2px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.character-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #333333, #444444);
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
 }
 
 .character-list {
