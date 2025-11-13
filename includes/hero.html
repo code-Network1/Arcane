@@ -1,0 +1,533 @@
+<!-- Hero Banner Section -->
+<section id="home" class="hero-banner">
+    <!-- Background Image Layer -->
+    <div class="hero-bg-image"></div>
+    
+    <!-- Background Video Layer -->
+    <video id="heroBgVideo1" class="hero-bg-video" muted loop preload="metadata">
+        <source src="videos/Arcane： Official Trailer.mp4" type="video/mp4">
+    </video>
+    
+    <video id="heroBgVideo2" class="hero-bg-video" muted loop preload="metadata">
+        <source src="videos/Arcane： Season 2 ｜ Official Trailer ｜ Netflix.mp4" type="video/mp4">
+    </video>
+    
+    <!-- Dark Overlay -->
+    <div class="hero-overlay"></div>
+    
+    <!-- Main Content -->
+    <div class="hero-main-content">
+        <div class="container">
+            <div class="row align-items-center min-vh-100">
+                <div class="col-lg-6 col-md-8">
+                    <div class="hero-text-content">
+                        <span class="hero-badge">Netflix Original Series</span>
+                        <h1 class="hero-title">ARCANE</h1>
+                        <p class="hero-description">
+                            رحلة ملحمية في عالم League of Legends. قصة الأختين Vi و Jinx في مدينتين متناقضتين - بيلتوفر المتطورة وزاون المظلمة.
+                        </p>
+                        
+                        <div class="hero-stats-row">
+                            <div class="hero-stat">
+                                <i class="fas fa-star"></i>
+                                <span>9.0 IMDb</span>
+                            </div>
+                            <div class="hero-stat">
+                                <i class="fas fa-award"></i>
+                                <span>4 Emmy Awards</span>
+                            </div>
+                            <div class="hero-stat">
+                                <i class="fas fa-film"></i>
+                                <span>9 Episodes</span>
+                            </div>
+                        </div>
+                        
+                        <div class="hero-action-buttons">
+                            <a href="page/episodes.html" class="hero-btn hero-btn-primary">
+                                <i class="fas fa-play"></i>
+                                <span>مشاهدة الآن</span>
+                            </a>
+                            <a href="https://www.netflix.com" target="_blank" class="hero-btn hero-btn-secondary">
+                                <i class="fab fa-netflix"></i>
+                                <span>شاهد على Netflix</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Season Controls -->
+    <div class="season-nav">
+        <div class="season-dots">
+            <button class="season-dot active" onclick="toggleSeason(1)" id="season1">
+                01
+                <span class="season-tooltip">Season 1</span>
+            </button>
+            <div class="dot-line"></div>
+            <button class="season-dot" onclick="toggleSeason(2)" id="season2">
+                02
+                <span class="season-tooltip">Season 2</span>
+            </button>
+        </div>
+    </div>
+    
+    <!-- Modern Sound Control (Bottom of Banner) -->
+    <div class="modern-sound-control" id="soundControl">
+        <div class="volume-control-modern" id="volumeContainer">
+            <div class="volume-track" id="volumeTrack">
+                <div class="volume-progress" id="volumeProgress"></div>
+                <div class="volume-handle" id="volumeHandle"></div>
+            </div>
+            <div class="volume-percentage" id="volumePercentage">50%</div>
+        </div>
+        <button class="modern-sound-btn muted" id="soundToggle" onclick="toggleSound()">
+            <i class="fas fa-volume-mute" id="soundIcon"></i>
+        </button>
+    </div>
+    
+</section>
+
+<script>
+// Advanced Season Control with Two Videos
+let currentSeason = 1;
+let isVideoPlaying = false;
+let isMuted = true; // Videos start muted
+
+function toggleSeason(season) {
+    const video1 = document.getElementById('heroBgVideo1');
+    const video2 = document.getElementById('heroBgVideo2');
+    const dot1 = document.getElementById('season1');
+    const dot2 = document.getElementById('season2');
+    
+    if (season === 1) {
+        if (currentSeason === 1 && isVideoPlaying) {
+            // Same season is playing - stop it
+            stopAllVideos();
+        } else {
+            // Different season or not playing - switch and start
+            stopAllVideos(); // Stop any current video
+            switchToSeason(1);
+            startVideo(video1, dot1, 1);
+        }
+    } else if (season === 2) {
+        if (currentSeason === 2 && isVideoPlaying) {
+            // Same season is playing - stop it
+            stopAllVideos();
+        } else {
+            // Different season or not playing - switch and start
+            stopAllVideos(); // Stop any current video
+            switchToSeason(2);
+            startVideo(video2, dot2, 2);
+        }
+    }
+}
+
+function startVideo(video, dot, season) {
+    if (!video) {
+        console.error(`Video ${season} not found!`);
+        return;
+    }
+    
+    console.log(`Starting Season ${season} video...`);
+    
+    // Apply current mute state
+    updateVideoMuteState(video);
+    
+    video.classList.add('video-active');
+    dot.classList.add('playing');
+    
+    video.play().then(() => {
+        isVideoPlaying = true;
+        currentSeason = season;
+        console.log(`Season ${season} video started successfully!`);
+        
+        // Show sound control when video plays
+        showSoundControl();
+        
+    }).catch(error => {
+        console.error(`Error playing Season ${season} video:`, error);
+        video.classList.remove('video-active');
+        dot.classList.remove('playing');
+    });
+}
+
+function stopAllVideos() {
+    const video1 = document.getElementById('heroBgVideo1');
+    const video2 = document.getElementById('heroBgVideo2');
+    const dot1 = document.getElementById('season1');
+    const dot2 = document.getElementById('season2');
+    
+    // Stop and reset all videos
+    [video1, video2].forEach(video => {
+        if (video) {
+            video.pause();
+            video.currentTime = 0;
+            video.classList.remove('video-active');
+        }
+    });
+    
+    // Remove playing state from all dots
+    [dot1, dot2].forEach(dot => {
+        if (dot) {
+            dot.classList.remove('playing');
+        }
+    });
+    
+    isVideoPlaying = false;
+    console.log('All videos stopped');
+    
+    // Hide sound control when no video is playing
+    hideSoundControl();
+}
+
+function switchToSeason(season) {
+    const dot1 = document.getElementById('season1');
+    const dot2 = document.getElementById('season2');
+    
+    console.log(`Switching to Season ${season}`);
+    
+    // Update UI
+    if (season === 1) {
+        dot1.classList.add('active');
+        dot2.classList.remove('active');
+    } else {
+        dot2.classList.add('active');
+        dot1.classList.remove('active');
+    }
+    
+    currentSeason = season;
+    console.log(`Switched to Season ${season} successfully!`);
+}
+
+// Setup video event listeners
+function setupVideoEvents() {
+    const video1 = document.getElementById('heroBgVideo1');
+    const video2 = document.getElementById('heroBgVideo2');
+    
+    [video1, video2].forEach((video, index) => {
+        if (video) {
+            const season = index + 1;
+            
+            video.addEventListener('ended', () => {
+                console.log(`Season ${season} video ended`);
+                stopAllVideos();
+            });
+            
+            video.addEventListener('error', (e) => {
+                console.error(`Season ${season} video error:`, e);
+                stopAllVideos();
+            });
+            
+            video.addEventListener('loadeddata', () => {
+                console.log(`Season ${season} video loaded successfully`);
+            });
+        }
+    });
+    
+    console.log('Video events setup completed!');
+}
+
+// Modern Sound Control Functions
+let currentVolume = 50; // Default volume
+
+function toggleSound() {
+    const video1 = document.getElementById('heroBgVideo1');
+    const video2 = document.getElementById('heroBgVideo2');
+    const soundBtn = document.getElementById('soundToggle');
+    const soundIcon = document.getElementById('soundIcon');
+    const volumeContainer = document.getElementById('volumeContainer');
+    
+    console.log('Sound button clicked! Current muted state:', isMuted);
+    
+    if (isMuted) {
+        // Unmute videos
+        if (video1) {
+            video1.muted = false;
+            video1.volume = currentVolume / 100;
+        }
+        if (video2) {
+            video2.muted = false;
+            video2.volume = currentVolume / 100;
+        }
+        
+        // Update UI
+        soundBtn.classList.remove('muted');
+        soundBtn.classList.add('unmuted');
+        updateSoundIcon(currentVolume);
+        showVolumeSlider();
+        
+        isMuted = false;
+        console.log('Videos unmuted - sound enabled at', currentVolume + '%');
+        
+    } else {
+        // Mute videos
+        if (video1) video1.muted = true;
+        if (video2) video2.muted = true;
+        
+        // Update UI
+        soundBtn.classList.remove('unmuted');
+        soundBtn.classList.add('muted');
+        soundIcon.className = 'fas fa-volume-mute';
+        hideVolumeSlider();
+        
+        isMuted = true;
+        console.log('Videos muted - sound disabled!');
+    }
+}
+
+function showVolumeSlider() {
+    const volumeContainer = document.getElementById('volumeContainer');
+    if (volumeContainer) {
+        volumeContainer.style.opacity = '1';
+        volumeContainer.style.visibility = 'visible';
+        volumeContainer.style.transform = 'translateX(0)';
+        
+        // Initialize visuals
+        updateVolumeVisuals(currentVolume);
+    }
+}
+
+function hideVolumeSlider() {
+    const volumeContainer = document.getElementById('volumeContainer');
+    if (volumeContainer) {
+        volumeContainer.style.opacity = '0';
+        volumeContainer.style.visibility = 'hidden';
+        volumeContainer.style.transform = 'translateX(10px)';
+    }
+}
+
+function changeVolume(value) {
+    const video1 = document.getElementById('heroBgVideo1');
+    const video2 = document.getElementById('heroBgVideo2');
+    
+    currentVolume = parseFloat(value);
+    
+    console.log('changeVolume called with value:', value, 'currentVolume set to:', currentVolume);
+    
+    // Update videos volume if not muted
+    if (!isMuted) {
+        if (video1) {
+            video1.volume = currentVolume / 100;
+            console.log('Video1 volume set to:', video1.volume);
+        }
+        if (video2) {
+            video2.volume = currentVolume / 100;
+            console.log('Video2 volume set to:', video2.volume);
+        }
+    }
+    
+    // Update visual elements
+    updateVolumeVisuals(currentVolume);
+    
+    // Update sound icon based on volume
+    if (!isMuted) {
+        updateSoundIcon(currentVolume);
+    }
+    
+    // If volume is 0, mute automatically (but keep slider visible)
+    if (currentVolume == 0 && !isMuted) {
+        // Mute but don't hide slider since user is actively using it
+        if (video1) video1.muted = true;
+        if (video2) video2.muted = true;
+        updateSoundIcon(0);
+    } else if (currentVolume > 0 && isMuted) {
+        // Auto unmute when volume is increased
+        toggleSound();
+    } else if (currentVolume > 0 && !isMuted) {
+        // Unmute if it was muted due to 0 volume
+        if (video1) video1.muted = false;
+        if (video2) video2.muted = false;
+        updateSoundIcon(currentVolume);
+    }
+    
+    console.log('Volume changed to:', currentVolume + '%');
+}
+
+function updateVolumeVisuals(value) {
+    const volumeProgress = document.getElementById('volumeProgress');
+    const volumeHandle = document.getElementById('volumeHandle');
+    const volumePercentage = document.getElementById('volumePercentage');
+    
+    // Update progress bar
+    if (volumeProgress) {
+        volumeProgress.style.width = value + '%';
+    }
+    
+    // Update handle position
+    if (volumeHandle) {
+        volumeHandle.style.left = value + '%';
+    }
+    
+    // Update percentage text
+    if (volumePercentage) {
+        volumePercentage.textContent = Math.round(value) + '%';
+    }
+    
+    console.log('Volume visuals updated to:', value + '%');
+}
+
+// Add drag functionality
+let isDragging = false;
+
+function setupVolumeControl() {
+    const volumeTrack = document.getElementById('volumeTrack');
+    const volumeHandle = document.getElementById('volumeHandle');
+    
+    if (volumeTrack) {
+        // Click anywhere on track
+        volumeTrack.addEventListener('click', handleTrackClick);
+        
+        // Mouse events for dragging
+        volumeTrack.addEventListener('mousedown', startDrag);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', endDrag);
+        
+        // Touch events for mobile
+        volumeTrack.addEventListener('touchstart', startDrag);
+        document.addEventListener('touchmove', drag);
+        document.addEventListener('touchend', endDrag);
+    }
+}
+
+function handleTrackClick(event) {
+    if (isDragging) return; // Don't process click if we're dragging
+    
+    const track = event.currentTarget;
+    const rect = track.getBoundingClientRect();
+    const clickX = event.clientX - rect.left;
+    const trackWidth = rect.width;
+    const newVolume = Math.max(0, Math.min(100, (clickX / trackWidth) * 100));
+    
+    console.log('Track clicked - X:', clickX, 'Width:', trackWidth, 'Volume:', newVolume);
+    changeVolume(newVolume);
+    
+    // Visual feedback
+    const volumeHandle = document.getElementById('volumeHandle');
+    if (volumeHandle) {
+        volumeHandle.style.transform = 'translate(-50%, -50%) scale(1.3)';
+        setTimeout(() => {
+            volumeHandle.style.transform = 'translate(-50%, -50%) scale(1)';
+        }, 150);
+    }
+}
+
+function startDrag(event) {
+    isDragging = true;
+    event.preventDefault();
+    
+    // Handle both mouse and touch events
+    const clientX = event.clientX || (event.touches && event.touches[0].clientX);
+    if (clientX) {
+        updateVolumeFromPosition(clientX);
+    }
+    
+    console.log('Started dragging');
+}
+
+function drag(event) {
+    if (!isDragging) return;
+    event.preventDefault();
+    
+    // Handle both mouse and touch events
+    const clientX = event.clientX || (event.touches && event.touches[0].clientX);
+    if (clientX) {
+        updateVolumeFromPosition(clientX);
+    }
+}
+
+function updateVolumeFromPosition(clientX) {
+    const track = document.getElementById('volumeTrack');
+    if (!track) return;
+    
+    const rect = track.getBoundingClientRect();
+    const mouseX = clientX - rect.left;
+    const trackWidth = rect.width;
+    const newVolume = Math.max(0, Math.min(100, (mouseX / trackWidth) * 100));
+    
+    changeVolume(newVolume);
+}
+
+function endDrag() {
+    if (isDragging) {
+        isDragging = false;
+        console.log('Ended dragging');
+    }
+}
+
+function updateSoundIcon(volume) {
+    const soundIcon = document.getElementById('soundIcon');
+    
+    if (isMuted || volume == 0) {
+        soundIcon.className = 'fas fa-volume-mute';
+    } else if (volume < 30) {
+        soundIcon.className = 'fas fa-volume-down';
+    } else if (volume < 70) {
+        soundIcon.className = 'fas fa-volume-up';
+    } else {
+        soundIcon.className = 'fas fa-volume-up';
+    }
+}
+
+// Update video mute state when starting videos
+function updateVideoMuteState(video) {
+    if (video) {
+        video.muted = isMuted;
+        video.volume = currentVolume / 100;
+    }
+}
+
+// Show/Hide modern sound control
+function showSoundControl() {
+    const soundControl = document.getElementById('soundControl');
+    
+    if (soundControl) {
+        soundControl.style.opacity = '1';
+        soundControl.style.visibility = 'visible';
+        soundControl.style.transform = 'translateY(0)';
+        
+        // Initialize volume visuals
+        updateVolumeVisuals(currentVolume);
+        
+        // Hide volume slider initially (will show only when unmuted)
+        if (isMuted) {
+            hideVolumeSlider();
+        } else {
+            showVolumeSlider();
+        }
+        
+        console.log('Modern sound control shown');
+    }
+}
+
+function hideSoundControl() {
+    const soundControl = document.getElementById('soundControl');
+    if (soundControl) {
+        soundControl.style.opacity = '0';
+        soundControl.style.visibility = 'hidden';
+        soundControl.style.transform = 'translateY(10px)';
+        console.log('Modern sound control hidden');
+    }
+}
+
+
+
+console.log('🎬 Advanced Season Control loaded!');
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM ready, setting up video events...');
+    setupVideoEvents();
+    setupVolumeControl();
+});
+
+// Also setup after a delay
+setTimeout(function() {
+    console.log('Delayed setup...');
+    setupVideoEvents();
+    setupVolumeControl();
+}, 600);
+</script>
+
+

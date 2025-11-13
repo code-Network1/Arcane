@@ -1,0 +1,45 @@
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="#home">
+            <img src="Banner/logo.png" alt="ARCANE" class="logo">
+            <span class="divider">/</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link active" href="#home">الرئيسية</a></li>
+                <li class="nav-item"><a class="nav-link" href="#arcane-info">عن المسلسل</a></li>
+                <li class="nav-item"><a class="nav-link" href="#spotify">الموسيقى</a></li>
+                <li class="nav-item"><a class="nav-link" href="#characters">الشخصيات</a></li>
+                <li class="nav-item"><a class="nav-link" href="page/episodes.html">الحلقات</a></li>
+            </ul>
+            
+            <!-- Background Music Control -->
+            <div class="navbar-music-control">
+                <button class="music-btn" id="musicToggle" onclick="simpleToggleMusic()" title="تشغيل/إيقاف الموسيقى">
+                    <i class="fas fa-music" id="musicIcon"></i>
+                </button>
+                
+                <!-- Sound Visualizer -->
+                <div class="sound-visualizer">
+                    <div class="sound-bar"></div>
+                    <div class="sound-bar"></div>
+                    <div class="sound-bar"></div>
+                    <div class="sound-bar"></div>
+                    <div class="sound-bar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Background Music Audio Element -->
+    <audio id="backgroundMusic" loop preload="auto">
+        <source src="mp3/Arcane Netflix Soundtrack _ Just A Taste _.mp3" type="audio/mpeg">
+        <source src="./mp3/Arcane%20Netflix%20Soundtrack%20_%20Just%20A%20Taste%20_.mp3" type="audio/mpeg">
+        متصفحك لا يدعم تشغيل الصوت.
+    </audio>
+    </div>
+</nav>
